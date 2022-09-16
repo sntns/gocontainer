@@ -6,7 +6,7 @@ import (
 
 	"github.com/opencontainers/go-digest"
 	ocischemav1 "github.com/opencontainers/image-spec/specs-go/v1"
-	"github.com/sntns/go-container/pkg/binary"
+	"github.com/sntns/gocontainer/pkg/binary"
 )
 
 func (c *Container) createConfig(entrypoint string, diffIDs []digest.Digest, pf binary.Platform) (ocischemav1.Descriptor, error) {

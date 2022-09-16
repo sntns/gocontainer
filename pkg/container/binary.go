@@ -8,7 +8,7 @@ import (
 	ocischema "github.com/opencontainers/image-spec/specs-go"
 	ocischemav1 "github.com/opencontainers/image-spec/specs-go/v1"
 
-	"github.com/sntns/go-container/pkg/binary"
+	"github.com/sntns/gocontainer/pkg/binary"
 )
 
 type Binary struct {

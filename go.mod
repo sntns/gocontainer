@@ -1,4 +1,4 @@
-module github.com/sntns/go-container
+module github.com/sntns/gocontainer
 
 go 1.19
 
@@ -7,7 +7,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 )
 
-require github.com/opencontainers/go-digest v1.0.0 // indirect
+require github.com/opencontainers/go-digest v1.0.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

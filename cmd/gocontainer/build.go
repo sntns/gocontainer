@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/sntns/go-container/pkg/container"
+	"github.com/sntns/gocontainer/pkg/container"
 	"github.com/spf13/cobra"
 )
 
-const TEMPDIR_FMT = "go-container-%s"
+const TEMPDIR_FMT = "gocontainer-%s"
 
 type CommonOptions struct {
 	outdir string
