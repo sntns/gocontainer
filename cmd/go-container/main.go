@@ -4,16 +4,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Command = newCommand()
-
-func newCommand() *cobra.Command {
+var Command = func() *cobra.Command {
 	command := &cobra.Command{
 		Use:   "go-container",
 		Short: "Tool to generate Docker/OCI container for GO",
 	}
-	command.AddCommand()
+	command.AddCommand(
+		buildCommand,
+	)
 	return command
-}
+}()
 
 func main() {
 	/*

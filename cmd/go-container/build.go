@@ -1,36 +1,65 @@
-package stack
+package main
 
 import (
+	"github.com/sntns/go-container/pkg/container"
 	"github.com/spf13/cobra"
 )
 
-var buildCommand = newBuildCommand()
+const TEMPDIR_FMT = "go-container-%s"
 
-func newBuildCommand() *cobra.Command {
+type CommonOptions struct {
+	outdir string
+}
+
+func setCommonFlags(command *cobra.Command, opts *CommonOptions) {
+	command.Flags().StringVar(&opts.outdir, "outdir", opts.outdir, "The OCI directory for container")
+	command.MarkFlagRequired("outdir")
+}
+
+var buildCommand = func() *cobra.Command {
 	var (
-		service string = ""
-		port           = uint16(0)
-		listen         = "0.0.0.0:0"
-		proto          = "TCP"
+		common   CommonOptions
+		binaries []string
+		labels   []string
+		copies   []string
 	)
 
 	command := &cobra.Command{
 		Use:   "build",
-		Short: "Build container",
+		Short: "Build new container",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			cont, err := container.New()
+			if err != nil {
+				return err
+			}
+
+			err = cont.SetLabels(labels...)
+			if err != nil {
+				return err
+			}
+
+			err = cont.Copy(copies...)
+			if err != nil {
+				return err
+			}
+
+			err = cont.AddBinary(binaries)
+			if err != nil {
+				return err
+			}
+
+			err = cont.Save(common.outdir)
+			if err != nil {
+				return err
+			}
 			return nil
 		},
 	}
+	setCommonFlags(command, &common)
 
-	command.Flags().StringVar(&service, "service", service, "The target service name")
-	command.MarkFlagRequired("service")
-
-	command.Flags().Uint16Var(&port, "port", port, "The target service port")
-	command.MarkFlagRequired("port")
-
-	command.Flags().StringVar(&proto, "proto", proto, "The target service protocol (TCP or UDP)")
-
-	command.Flags().StringVar(&listen, "listen", listen, "The listen host:port")
+	command.Flags().StringSliceVar(&binaries, "binary", binaries, "Binary to include in container")
+	command.Flags().StringSliceVar(&copies, "copy", copies, "Copy directory or file to container (format: <file|dir>[:<destination>]")
+	command.Flags().StringSliceVar(&labels, "label", labels, "Add container label")
 
 	return command
-}
+}()
