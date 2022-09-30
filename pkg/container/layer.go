@@ -2,6 +2,7 @@ package container
 
 import (
 	"io/fs"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -27,35 +28,46 @@ func (c *Container) createLayer(items ...TarItem) (ocischemav1.Descriptor, diges
 	}, diffid, nil
 }
 
-func (c *Container) createLayerFromDir(target string, dir string) (ocischemav1.Descriptor, digest.Digest, error) {
-	items := []TarItem{}
-
-	err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
-		if len(info.Name()) > 2 && info.Name()[0] == '.' {
-			// skip hidden files
-			return filepath.SkipDir
-		}
-		if !info.IsDir() {
-			items = append(items, TarItem{
-				File:        path,
-				Destination: strings.Replace(path, dir, target, 1),
-			})
-		}
-		return nil
-	})
-	if err != nil {
-		return ocischemav1.Descriptor{}, digest.Digest(""), err
-	}
-	return c.createLayer(items...)
-}
-
-func (c *Container) createLayerFromFiles(target string, fnames ...string) (ocischemav1.Descriptor, digest.Digest, error) {
+func createTarItemFrom(target string, fnames ...string) ([]TarItem, error) {
 	items := []TarItem{}
 	for _, fname := range fnames {
-		items = append(items, TarItem{
-			File:        fname,
-			Destination: filepath.Join(target, filepath.Base(fname)),
-		})
+		info, err := os.Stat(fname)
+		if err != nil {
+			return nil, err
+		}
+
+		if info.IsDir() {
+			err := filepath.Walk(fname, func(path string, info fs.FileInfo, err error) error {
+				if len(info.Name()) > 2 && info.Name()[0] == '.' {
+					// skip hidden files
+					return filepath.SkipDir
+				}
+				if !info.IsDir() {
+					items = append(items, TarItem{
+						File:        path,
+						Destination: strings.Replace(path, fname, target, 1),
+					})
+				}
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			items = append(items, TarItem{
+				File:        fname,
+				Destination: filepath.Join(target, filepath.Base(fname)),
+			})
+		}
+	}
+
+	return items, nil
+}
+
+func (c *Container) createLayerFrom(target string, fnames ...string) (ocischemav1.Descriptor, digest.Digest, error) {
+	items, err := createTarItemFrom(target, fnames...)
+	if err != nil {
+		return ocischemav1.Descriptor{}, digest.Digest(""), err
 	}
 	return c.createLayer(items...)
 }
