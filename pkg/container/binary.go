@@ -18,7 +18,7 @@ type Binary struct {
 
 func (c *Container) createImageFromBinary(fname string, pf binary.Platform) (digest.Digest, int64, error) {
 
-	rootfs, diffid, err := c.createLayerFromFiles("/", fname)
+	rootfs, diffid, err := c.createLayerFrom("/", fname)
 	if err != nil {
 		return digest.Digest(""), 0, err
 	}
