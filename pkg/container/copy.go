@@ -7,17 +7,9 @@ import (
 func (c *Container) Copy(names ...string) error {
 	items := []TarItem{}
 	for _, name := range names {
-		tokens := strings.Split(name, ":")
-		var fname, target string
-		switch len(tokens) {
-		case 1:
-			fname = tokens[0]
-			target = tokens[0]
-		case 2:
-			fname = tokens[0]
-			target = tokens[1]
-		default:
-			return ErrInvalidCopyName
+		fname, target, found := strings.Cut(name, ":")
+		if !found {
+			target = fname
 		}
 
 		its, err := createTarItemFrom(target, fname)

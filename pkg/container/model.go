@@ -15,6 +15,7 @@ type Container struct {
 	Layout        ocischemav1.ImageLayout
 	Index         ocischemav1.Index
 	Labels        map[string]string
+	Healthcheck   *HealthcheckConfig
 }
 
 type Layer struct {

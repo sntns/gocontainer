@@ -56,7 +56,7 @@ func createTarItemFrom(target string, fnames ...string) ([]TarItem, error) {
 		} else {
 			items = append(items, TarItem{
 				File:        fname,
-				Destination: filepath.Join(target, filepath.Base(fname)),
+				Destination: target,
 			})
 		}
 	}

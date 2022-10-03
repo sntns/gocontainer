@@ -2,7 +2,7 @@ package container
 
 import (
 	"encoding/json"
-	"path/filepath"
+	"strings"
 
 	"github.com/opencontainers/go-digest"
 	ocischema "github.com/opencontainers/image-spec/specs-go"
@@ -16,18 +16,15 @@ type Binary struct {
 	File     string
 }
 
-func (c *Container) createImageFromBinary(fname string, pf binary.Platform) (digest.Digest, int64, error) {
+func (c *Container) createImageFromBinary(target string, path string, pf binary.Platform) (digest.Digest, int64, error) {
 
-	rootfs, diffid, err := c.createLayerFrom("/", fname)
+	rootfs, diffid, err := c.createLayerFrom(target, path)
 	if err != nil {
 		return digest.Digest(""), 0, err
 	}
 
 	config, err := c.createConfig(
-		filepath.Join(
-			"/",
-			filepath.Base(fname),
-		),
+		target,
 		append(c.SharedDiffIDs, diffid),
 		pf,
 	)
@@ -55,13 +52,18 @@ func (c *Container) createImageFromBinary(fname string, pf binary.Platform) (dig
 	return c.addBlob(b)
 }
 
-func (c *Container) addBinary(fname string) (ocischemav1.Descriptor, error) {
-	pf, err := binary.GetInfo(fname)
+func (c *Container) addBinary(fnamepair string) (ocischemav1.Descriptor, error) {
+	file, fname, found := strings.Cut(fnamepair, ":")
+	if !found {
+		fname = file
+	}
+
+	pf, err := binary.GetInfo(file)
 	if err != nil {
 		return ocischemav1.Descriptor{}, err
 	}
 
-	dig, size, err := c.createImageFromBinary(fname, pf)
+	dig, size, err := c.createImageFromBinary(fname, file, pf)
 	if err != nil {
 		return ocischemav1.Descriptor{}, err
 	}
