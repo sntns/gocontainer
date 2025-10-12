@@ -41,7 +41,7 @@ jobs:
       run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
 
     - name: Upload coverage to Codecov
-      if: matrix.go-version == '1.23'
+      if: matrix.go-version == '1.22'
       uses: codecov/codecov-action@v4
       with:
         file: ./coverage.out
@@ -65,7 +65,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.23'
+        go-version: '1.22'
 
     - name: Check out code
       uses: actions/checkout@v4
@@ -95,7 +95,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.23'
+        go-version: '1.22'
 
     - name: Download dependencies
       run: go mod download
@@ -106,5 +106,5 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v6
       with:
-        version: v1.59.1
+        version: v1.55.2
         args: --timeout=5m

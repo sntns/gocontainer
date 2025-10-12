@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/opencontainers/go-digest"
+	digest "github.com/opencontainers/go-digest"
 )
 
 type TarItem struct {
