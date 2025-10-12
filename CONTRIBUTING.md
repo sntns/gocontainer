@@ -38,18 +38,37 @@ We use GitHub to host code, to track issues and feature requests, as well as acc
 
 2. Install dependencies:
    ```bash
-   go mod download
+   make deps
+   # or manually: go mod download
    ```
 
 3. Build the project:
    ```bash
-   go build ./cmd/gocontainer
+   make build
+   # or manually: go build ./cmd/gocontainer
    ```
 
 4. Run tests:
    ```bash
-   go test ./...
+   make test
+   # or manually: go test ./...
    ```
+
+5. Run a quick demo:
+   ```bash
+   make demo
+   ```
+
+### Available Make Targets
+
+- `make build` - Build the binary
+- `make test` - Run tests with coverage
+- `make examples` - Build all examples
+- `make demo` - Run a quick demo
+- `make lint` - Run linters
+- `make clean` - Clean build artifacts
+- `make install` - Install the binary
+- `make help` - Show all available targets
 
 ## Testing
 

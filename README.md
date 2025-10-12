@@ -49,6 +49,20 @@ Download the latest binary from the [releases page](https://github.com/sntns/goc
    podman import ./container-output myapp:latest
    ```
 
+### Try the Demo
+
+If you have the repository cloned, you can quickly try GoContainer with our examples:
+
+```bash
+# Clone and run demo
+git clone https://github.com/sntns/gocontainer.git
+cd gocontainer
+make demo
+
+# The demo creates a container from the webserver example
+# Check the output in examples/webserver/container-output/
+```
+
 ## Usage
 
 ### Basic Container Creation
