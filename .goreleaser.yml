@@ -1,0 +1,90 @@
+project_name: gocontainer
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  - id: gocontainer
+    main: ./cmd/gocontainer
+    binary: gocontainer
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^build:'
+      - '^chore:'
+      - 'typo'
+
+release:
+  github:
+    owner: sntns
+    name: gocontainer
+  draft: false
+  prerelease: auto
+  name_template: "{{.ProjectName}} v{{.Version}}"
+  header: |
+    ## GoContainer v{{.Version}}
+    
+    ### Changes
+  footer: |
+    ## Installation
+    
+    ### From Binary
+    Download the appropriate binary for your platform from the assets below.
+    
+    ### From Source
+    ```bash
+    go install github.com/sntns/gocontainer/cmd/gocontainer@{{.Tag}}
+    ```
+    
+    **Full Changelog**: https://github.com/sntns/gocontainer/compare/{{.PreviousTag}}...{{.Tag}}
+
+brews:
+  - name: gocontainer
+    repository:
+      owner: sntns
+      name: homebrew-tap
+    homepage: https://github.com/sntns/gocontainer
+    description: "Tool to generate Docker/OCI containers for Go applications"
+    license: MIT

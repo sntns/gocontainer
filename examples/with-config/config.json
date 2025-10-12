@@ -1,0 +1,5 @@
+{
+  "app_name": "ConfigurableApp",
+  "port": "8080",
+  "message": "Hello from GoContainer with configuration! 🎉"
+}

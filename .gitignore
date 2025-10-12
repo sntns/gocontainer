@@ -15,3 +15,16 @@
 # vendor/
 
 /gocontainer
+
+# Build artifacts
+dist/
+coverage.out
+
+# Example binaries
+examples/*/webserver
+examples/*/server
+examples/*/worker
+examples/*/configapp
+
+# Container outputs from examples
+examples/*/container-output/
