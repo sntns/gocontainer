@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/opencontainers/go-digest"
+	digest "github.com/opencontainers/go-digest"
 )
 
 type Blob struct {
@@ -37,7 +37,6 @@ func (c *Container) WriteBlobs(dirname string) error {
 		if err != nil {
 			return err
 		}
-
 	}
 	return nil
 }

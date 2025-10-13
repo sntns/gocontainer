@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/opencontainers/go-digest"
+	digest "github.com/opencontainers/go-digest"
 	ocischema "github.com/opencontainers/image-spec/specs-go"
 	ocischemav1 "github.com/opencontainers/image-spec/specs-go/v1"
 
@@ -16,8 +16,9 @@ type Binary struct {
 	File     string
 }
 
-func (c *Container) createImageFromBinary(target string, path string, pf binary.Platform) (digest.Digest, int64, error) {
-
+func (c *Container) createImageFromBinary(
+	target string, path string, pf binary.Platform,
+) (digest.Digest, int64, error) {
 	rootfs, diffid, err := c.createLayerFrom(target, path)
 	if err != nil {
 		return digest.Digest(""), 0, err
