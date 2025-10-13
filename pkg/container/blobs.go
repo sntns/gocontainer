@@ -37,7 +37,6 @@ func (c *Container) WriteBlobs(dirname string) error {
 		if err != nil {
 			return err
 		}
-
 	}
 	return nil
 }

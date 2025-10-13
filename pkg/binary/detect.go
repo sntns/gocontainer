@@ -37,8 +37,8 @@ func elfInfo(name string) (Platform, error) {
 	defer f.Close()
 
 	mmachine := map[elf.Machine]Architecture{
-		elf.EM_AARCH64: ARCH_ARM64,
-		elf.EM_X86_64:  ARCH_AMD64,
+		elf.EM_AARCH64: ArchARM64,
+		elf.EM_X86_64:  ArchAMD64,
 	}
 	arch, ok := mmachine[f.Machine]
 	if !ok {
@@ -46,7 +46,7 @@ func elfInfo(name string) (Platform, error) {
 	}
 
 	return Platform{
-		OS:           OS_LINUX,
+		OS:           OSLinux,
 		Architecture: arch,
 	}, nil
 }
@@ -57,8 +57,8 @@ func machoInfo(name string) (Platform, error) {
 		return Platform{}, err
 	}
 	mcpu := map[macho.Cpu]Architecture{
-		macho.CpuArm64: ARCH_ARM64,
-		macho.CpuAmd64: ARCH_AMD64,
+		macho.CpuArm64: ArchARM64,
+		macho.CpuAmd64: ArchAMD64,
 	}
 	arch, ok := mcpu[f.Cpu]
 	if !ok {

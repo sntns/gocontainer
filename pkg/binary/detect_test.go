@@ -11,7 +11,7 @@ import (
 
 func TestInfo(t *testing.T) {
 	cmd := exec.Command("make", "all")
-	cmd.Dir = filepath.Join("testdata")
+	cmd.Dir = "testdata"
 	err := cmd.Run()
 	if err != nil {
 		t.Error(err)
@@ -23,15 +23,15 @@ func TestInfo(t *testing.T) {
 	}{
 		{
 			desc:     "should detect linux/amd64",
-			platform: Platform{OS: OS_LINUX, Architecture: ARCH_AMD64},
+			platform: Platform{OS: OSLinux, Architecture: ArchAMD64},
 		},
 		{
 			desc:     "should detect linux/arm64",
-			platform: Platform{OS: OS_LINUX, Architecture: ARCH_ARM64},
+			platform: Platform{OS: OSLinux, Architecture: ArchARM64},
 		},
 		{
 			desc:     "should detect darwin/arm64",
-			platform: Platform{OS: OS_DARWIN, Architecture: ARCH_ARM64},
+			platform: Platform{OS: OSDarwin, Architecture: ArchARM64},
 		},
 	} {
 		t.Run(fmt.Sprintf("k=%d/case=%s", k, tc.desc), func(t *testing.T) {
@@ -41,8 +41,6 @@ func TestInfo(t *testing.T) {
 			r.NoError(err)
 			r.Equal(tc.platform.OS, pf.OS)
 			r.Equal(tc.platform.Architecture, pf.Architecture)
-
 		})
 	}
-
 }

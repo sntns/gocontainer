@@ -16,8 +16,9 @@ type Binary struct {
 	File     string
 }
 
-func (c *Container) createImageFromBinary(target string, path string, pf binary.Platform) (digest.Digest, int64, error) {
-
+func (c *Container) createImageFromBinary(
+	target string, path string, pf binary.Platform,
+) (digest.Digest, int64, error) {
 	rootfs, diffid, err := c.createLayerFrom(target, path)
 	if err != nil {
 		return digest.Digest(""), 0, err

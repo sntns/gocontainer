@@ -5,15 +5,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const TEMPDIR_FMT = "gocontainer-%s"
-
 type CommonOptions struct {
 	outdir string
 }
 
 func setCommonFlags(command *cobra.Command, opts *CommonOptions) {
 	command.Flags().StringVar(&opts.outdir, "outdir", opts.outdir, "The OCI directory for container")
-	command.MarkFlagRequired("outdir")
+	_ = command.MarkFlagRequired("outdir")
 }
 
 var buildCommand = func() *cobra.Command {
@@ -65,8 +63,10 @@ var buildCommand = func() *cobra.Command {
 	}
 	setCommonFlags(command, &common)
 
-	command.Flags().StringSliceVar(&binaries, "binary", binaries, "Binary to include in container (format: <file>[:<name>]")
-	command.Flags().StringSliceVar(&copies, "copy", copies, "Copy directory or file to container (format: <file|dir>[:<destination>]")
+	command.Flags().StringSliceVar(&binaries, "binary", binaries,
+		"Binary to include in container (format: <file>[:<name>]")
+	command.Flags().StringSliceVar(&copies, "copy", copies,
+		"Copy directory or file to container (format: <file|dir>[:<destination>]")
 	command.Flags().StringSliceVar(&labels, "label", labels, "Add LABEL instruction")
 	command.Flags().StringVar(&healthcheck, "healthcheck", healthcheck, "Add HEALTHCHECK instruction")
 

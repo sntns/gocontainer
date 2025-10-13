@@ -4,13 +4,13 @@ type OS string
 type Architecture string
 
 const (
-	OS_LINUX  OS = "linux"
-	OS_DARWIN OS = "darwin"
+	OSLinux  OS = "linux"
+	OSDarwin OS = "darwin"
 )
 
 const (
-	ARCH_AMD64 Architecture = "amd64"
-	ARCH_ARM64 Architecture = "arm64"
+	ArchAMD64 Architecture = "amd64"
+	ArchARM64 Architecture = "arm64"
 )
 
 type Platform struct {

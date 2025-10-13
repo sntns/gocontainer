@@ -25,7 +25,8 @@ type (
 	// used item and adding:
 	//   - healthcheck
 	ImageConfig struct {
-		// ImageConfig defines the execution parameters which should be used as a base when running a container using an image.
+		// ImageConfig defines the execution parameters which should be used as a base
+		// when running a container using an image.
 		Entrypoint []string `json:"Entrypoint,omitempty"`
 		WorkingDir string   `json:"WorkingDir,omitempty"`
 
@@ -35,7 +36,9 @@ type (
 	}
 )
 
-func (c *Container) createConfig(entrypoint string, diffIDs []digest.Digest, pf binary.Platform) (ocischemav1.Descriptor, error) {
+func (c *Container) createConfig(
+	entrypoint string, diffIDs []digest.Digest, pf binary.Platform,
+) (ocischemav1.Descriptor, error) {
 	now := time.Now()
 	config := Image{
 		Architecture: string(pf.Architecture),
