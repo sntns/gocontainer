@@ -17,10 +17,3 @@ require (
 	github.com/spf13/pflag v1.0.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// Exclude examples from main module
-exclude github.com/sntns/gocontainer/examples/webserver v0.0.0
-
-exclude github.com/sntns/gocontainer/examples/multi-binary v0.0.0
-
-exclude github.com/sntns/gocontainer/examples/with-config v0.0.0
