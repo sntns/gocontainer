@@ -2,12 +2,22 @@ package container
 
 import (
 	"encoding/json"
+	"os"
+	"strconv"
 	"time"
 
 	digest "github.com/opencontainers/go-digest"
 	ocischemav1 "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/sntns/gocontainer/pkg/binary"
 )
+
+// Epoch is the time stamped in the image: SOURCE_DATE_EPOCH, or the Unix epoch, for reproducible images.
+func Epoch() time.Time {
+	if seconds, err := strconv.ParseInt(os.Getenv("SOURCE_DATE_EPOCH"), 10, 64); err == nil {
+		return time.Unix(seconds, 0).UTC()
+	}
+	return time.Unix(0, 0).UTC()
+}
 
 type (
 	// Image is copied from ocischemav1 (except the Config)
@@ -39,11 +49,11 @@ type (
 func (c *Container) createConfig(
 	entrypoint string, diffIDs []digest.Digest, pf binary.Platform,
 ) (ocischemav1.Descriptor, error) {
-	now := time.Now()
+	created := Epoch()
 	config := Image{
 		Architecture: string(pf.Architecture),
 		OS:           string(pf.OS),
-		Created:      &now,
+		Created:      &created,
 		Config: ImageConfig{
 			Entrypoint: []string{
 				entrypoint,

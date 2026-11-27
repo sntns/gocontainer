@@ -4,6 +4,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	digest "github.com/opencontainers/go-digest"
@@ -11,6 +12,7 @@ import (
 )
 
 func (c *Container) createLayer(items ...TarItem) (ocischemav1.Descriptor, digest.Digest, error) {
+	slices.SortStableFunc(items, func(a, b TarItem) int { return strings.Compare(a.Destination, b.Destination) })
 	b, diffid, err := createTarFrom(items...)
 	if err != nil {
 		return ocischemav1.Descriptor{}, digest.Digest(""), err

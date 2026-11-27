@@ -2,6 +2,7 @@ package container
 
 import (
 	"encoding/json"
+	"slices"
 	"strings"
 
 	digest "github.com/opencontainers/go-digest"
@@ -96,6 +97,10 @@ func (c *Container) AddBinary(fnames []string) error {
 		}
 		index.Manifests = append(index.Manifests, desc)
 	}
+
+	slices.SortStableFunc(index.Manifests, func(a, b ocischemav1.Descriptor) int {
+		return strings.Compare(a.Platform.OS+"/"+a.Platform.Architecture, b.Platform.OS+"/"+b.Platform.Architecture)
+	})
 
 	b, err := json.MarshalIndent(index, "", "    ")
 	if err != nil {

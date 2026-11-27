@@ -29,17 +29,12 @@ func addToArchive(tw *tar.Writer, filename string, destname string) error {
 		return err
 	}
 
-	// Create a tar Header from the FileInfo data
-	header, err := tar.FileInfoHeader(info, info.Name())
-	if err != nil {
-		return err
+	// Only the content and the executable bit: no owner, time nor umask of the machine that builds.
+	mode := int64(0o644)
+	if info.Mode()&0o111 != 0 {
+		mode = 0o755
 	}
-
-	// Use full path as name (FileInfoHeader only takes the basename)
-	// If we don't do this the directory strucuture would
-	// not be preserved
-	// https://golang.org/src/archive/tar/common.go?#L626
-	header.Name = destname
+	header := &tar.Header{Typeflag: tar.TypeReg, Name: destname, Mode: mode, Size: info.Size(), ModTime: Epoch()}
 
 	// Write file header to the tar archive
 	err = tw.WriteHeader(header)
